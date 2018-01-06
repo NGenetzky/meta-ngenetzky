@@ -7,6 +7,7 @@ PR = "r2"
 
 # Not machine or architecture dependent.
 inherit allarch
+inherit devpackage
 
 # I dislike the git fetcher's default destsuffix. I prefer to keep the repo name.
 SRCNAME = "ngenetzky-petstore"
@@ -23,8 +24,6 @@ FILES_${PN}-dev = " \
 	ngenetzky/${SRCNAME} \
 "
 dev_install() {
-	install -d \ 
-		"${D}/ngenetzky"
 	cp -R -T \
 		"${S}" \
 		"${D}/ngenetzky/${SRCNAME}"
@@ -42,9 +41,11 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install() {
-	install -d \ 
-		"${D}/ngenetzky"
-	dev_install
+    install -d \
+        "${D}/devpackage/TOPDIR/tmp/work/${PN}/${PV}-${PR}/${PN}-${PV}"
+    cp -R -T \
+		"${S}" \
+        "${D}/devpackage/TOPDIR/tmp/work/${PN}/${PV}-${PR}/${PN}-${PV}"
 }
 
 # do_populate_sysroot
