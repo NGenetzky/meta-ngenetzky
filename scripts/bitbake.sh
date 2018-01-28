@@ -48,6 +48,13 @@ bitbake()
         $@
 }
 
+bitbake_set_path(){
+    local p="${1?}"
+    [[ -d ${p} ]] || return 1
+    export PATH="${p}/bin:$PATH"
+    export PYTHONPATH="${p}/lib:$PYTHONPATH"
+}
+
 main()
 {
     bitbake_setup ${1?}
