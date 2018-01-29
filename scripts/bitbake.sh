@@ -29,18 +29,19 @@ do_fetch()
     repo init \
         --manifest-url=git://github.com/ngenetzky/yocto-manifests.git \
         -b "${rev}" \
-        --groups=poky
+        --groups=poky,rpi
     repo sync -j 4
     popd
 }
 
 do_configure()
 {
+    local name="${1-basic}"
     local confdir="${WORKDIR?}/build/conf"
     mkdir -p "${confdir}"
     install -m 664 --target-directory="${confdir}" \
-        ${GITROOT}/projects/basic/local.conf \
-        ${GITROOT}/projects/basic/bblayers.conf
+        "${GITROOT}/projects/${name}/local.conf" \
+        "${GITROOT}/projects/${name}/bblayers.conf"
 }
 
 bitbake()
@@ -69,7 +70,7 @@ main()
     # bitbake_setup ${1?}
     bitbake_setup_external ${1?}
     do_fetch
-    do_configure
+    do_configure 'rpi3'
     bitbake
 }
 
