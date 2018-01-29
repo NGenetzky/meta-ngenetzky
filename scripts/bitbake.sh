@@ -10,9 +10,18 @@ bitbake_setup()
     WORKDIR=${workdir}
 }
 
+bitbake_setup_external()
+{
+    local workdir="${1?}"
+
+    DL_DIR="/media/ngenetzky/lnx-passport/ngenetzky/yocto-downloads"
+    SSTATE_CACHE="/media/ngenetzky/lnx-passport/ngenetzky/yocto-sstate-cache"
+    WORKDIR=${workdir}
+}
+
 do_fetch()
 {
-    local rev="${1-morty}"
+    local rev="${1-rocko}"
 
     local yoctodir="${WORKDIR?}/yocto/"
     mkdir -p "${yoctodir}"
@@ -57,7 +66,8 @@ bitbake_set_path(){
 
 main()
 {
-    bitbake_setup ${1?}
+    # bitbake_setup ${1?}
+    bitbake_setup_external ${1?}
     do_fetch
     do_configure
     bitbake
