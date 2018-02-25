@@ -21,7 +21,7 @@ bitbake_setup_external()
 
 do_fetch()
 {
-    local rev="${1-rocko}"
+    local rev="${1-pyro}"
 
     local yoctodir="${WORKDIR?}/yocto/"
     mkdir -p "${yoctodir}"
@@ -67,8 +67,8 @@ bitbake_set_path(){
 
 main()
 {
-    # bitbake_setup ${1?}
-    bitbake_setup_external ${1?}
+    bitbake_setup ${1?}
+    # bitbake_setup_external ${1?}
     do_fetch
     do_configure 'rpi3'
     bitbake
