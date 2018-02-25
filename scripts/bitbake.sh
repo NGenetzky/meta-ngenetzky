@@ -48,7 +48,7 @@ bitbake()
 {
     docker run \
         --rm -it \
-        --env-file ${GITROOT}/projects/basic/env-file.sh \
+        --env-file "${ENV_FILE?}" \
         -v ${WORKDIR?}:/workdir \
         -v ${DL_DIR?}:/mnt/downloads \
         -v ${SSTATE_CACHE?}:/mnt/sstate-cache \
@@ -67,11 +67,15 @@ bitbake_set_path(){
 
 main()
 {
-    bitbake_setup ${1?}
-    # bitbake_setup_external ${1?}
-    do_fetch
-    do_configure 'rpi3'
-    bitbake
+  bitbake_setup ${1?}
+  local project="${2-rpi3}"
+
+  export ENV_FILE="${GITROOT}/projects/${project}/env-file.sh"
+
+  # bitbake_setup_external ${1?}
+  do_fetch
+  do_configure "${project}"
+  bitbake
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
