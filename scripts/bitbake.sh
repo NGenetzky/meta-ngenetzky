@@ -29,9 +29,19 @@ do_fetch()
     repo init \
         --manifest-url=git://github.com/ngenetzky/yocto-manifests.git \
         -b "${rev}" \
-        --groups=poky,rpi
+        --groups=resin-rpi
     repo sync -j 4
     popd
+}
+
+do_fetch_resin()
+{
+    local board="${1-raspberrypi}"
+    local repo="git@github.com:resin-os/resin-${board}.git"
+
+    local resindir="${WORKDIR?}/resin-${board}/"
+    mkdir -p "${resindir}"
+    git clone --recursive "${repo}" "${resindir}"
 }
 
 do_configure()
@@ -49,11 +59,14 @@ bitbake()
     docker run \
         --rm -it \
         --env-file "${ENV_FILE?}" \
-        -v ${WORKDIR?}:/workdir \
+        --group-add "docker" \
+        -v "/var/run/docker.sock:/var/run/docker.sock" \
+        -v "/usr/bin/docker:/usr/bin/docker" \
         -v ${DL_DIR?}:/mnt/downloads \
-        -v ${SSTATE_CACHE?}:/mnt/sstate-cache \
         -v ${GITROOT?}:/mnt/meta-ngenetzky \
-        crops/poky \
+        -v ${SSTATE_CACHE?}:/mnt/sstate-cache \
+        -v ${WORKDIR?}:/workdir \
+        ngenetzky/poky-with-docker \
         --workdir=/workdir \
         $@
 }
@@ -68,12 +81,13 @@ bitbake_set_path(){
 main()
 {
   bitbake_setup ${1?}
-  local project="${2-rpi3}"
+  local project="${2-resin-rpi3}"
 
   export ENV_FILE="${GITROOT}/projects/${project}/env-file.sh"
 
   # bitbake_setup_external ${1?}
   do_fetch
+  # do_fetch_resin 'raspberrypi'
   do_configure "${project}"
   bitbake
 }
