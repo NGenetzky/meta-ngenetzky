@@ -29,7 +29,7 @@ do_fetch()
     repo init \
         --manifest-url=git://github.com/ngenetzky/yocto-manifests.git \
         -b "${rev}" \
-        --groups=poky,rpi
+        --groups=poky
     repo sync -j 4
     popd
 }
@@ -68,7 +68,7 @@ bitbake_set_path(){
 main()
 {
   bitbake_setup ${1?}
-  local project="${2-rpi3}"
+  local project="${2-x86-64}"
 
   export ENV_FILE="${GITROOT}/projects/${project}/env-file.sh"
 
