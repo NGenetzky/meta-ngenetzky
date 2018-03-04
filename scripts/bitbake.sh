@@ -29,7 +29,7 @@ do_fetch()
     repo init \
         --manifest-url=git://github.com/ngenetzky/yocto-manifests.git \
         -b "${rev}" \
-        --groups=poky
+        --groups=poky,oe
     repo sync -j 4
     popd
 }
