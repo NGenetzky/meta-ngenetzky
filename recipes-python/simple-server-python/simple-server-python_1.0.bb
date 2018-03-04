@@ -18,3 +18,5 @@ do_install() {
 }
 FILES_${PN} += "${bindir}/"
 
+RDEPENDS_${PN} += "python-flask"
+
