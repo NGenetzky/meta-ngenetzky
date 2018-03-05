@@ -7,6 +7,7 @@ inherit pypi
 
 RDEPENDS_${PN} = "\
 	${PYTHON_PN}-clickclick \
+	${PYTHON_PN}-flask \
 	${PYTHON_PN}-inflection \
 	${PYTHON_PN}-jsonschema \
 	${PYTHON_PN}-pathlib \
