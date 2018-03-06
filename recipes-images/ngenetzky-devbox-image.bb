@@ -10,9 +10,20 @@ IMAGE_INSTALL = "\
     ${CORE_IMAGE_EXTRA_INSTALL} \
     "
 
-LICENSE = "MIT"
+IMAGE_INSTALL_append = "\
+    bash \
+    curl \
+    python \
+    tmux \
+    vim \
+"
+
+IMAGE_INSTALL_append = "\
+    dotfiles \
+"
 
 inherit core-image
 
 IMAGE_ROOTFS_SIZE ?= "8192"
 IMAGE_ROOTFS_EXTRA_SPACE_append = "${@bb.utils.contains("DISTRO_FEATURES", "systemd", " + 4096", "" ,d)}"
+
