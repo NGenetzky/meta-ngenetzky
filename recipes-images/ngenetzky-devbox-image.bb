@@ -1,8 +1,14 @@
-SUMMARY = "A small image just capable of allowing a device to boot."
+SUMMARY = "Small yet usable docker devbox."
+PV = "1.0"
+PV = "r0"
 
-IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
+IMAGE_FEATURES += "splash ssh-server-openssh"
 
-IMAGE_LINGUAS = " "
+IMAGE_INSTALL = "\
+    packagegroup-core-boot \
+    packagegroup-core-full-cmdline \
+    ${CORE_IMAGE_EXTRA_INSTALL} \
+    "
 
 LICENSE = "MIT"
 
