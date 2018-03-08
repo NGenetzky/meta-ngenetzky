@@ -46,6 +46,7 @@ do_install() {
 	cp_from_spacevim 'autoload'
 	cp_from_spacevim 'bin'
 	cp_from_spacevim 'config'
+	cp_from_spacevim 'doc'
 	cp_from_spacevim 'ftplugin'
 	cp_from_spacevim 'mode'
 	cp_from_spacevim 'syntax'
