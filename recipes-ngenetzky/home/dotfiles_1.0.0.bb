@@ -2,7 +2,7 @@ SUMMARY = "My goal is to utilize existing frameworks to create a modular dotfile
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0a1d42d49e7406a6bdc8bb01e7bc9677"
 
-PR = "r1"
+PR = "r2"
 
 SRC_URI = "\
 	git://github.com/NGenetzky/dotfiles.git;destsuffix=${PN}-${PV} \
@@ -17,15 +17,22 @@ do_compile() {
 		https://github.com/NGenetzky/dotfiles.git \
 		"${B}/home/.dotfiles"
 	# bash
-	ln -Tfs ./.dotfiles/config/bash/bashrc \
+	ln -Tfs ".dotfiles/config/bash/bashrc" \
 		"${homedir}/.bashrc"
-	ln -Tfs ./.dotfiles/config/bash/profile \
+	ln -Tfs ".dotfiles/config/bash/profile" \
 		"${homedir}/.profile"
-	ln -Tfs ./.dotfiles/config/bash/bash_logout \
+	ln -Tfs ".dotfiles/config/bash/bash_logout" \
 		"${homedir}/.bash_logout"
+	# bash-it
+	install -d \
+		"${homedir}/.bash_it"
+	ln -sfT "../.dotfiles/bash/bash-it/custom/" \
+		"${homedir}/.bash_it/custom"
 	# tmux
-	ln -Tfs ./.dotfiles/config/tmux/tmux.conf \
-		"${homedir}/.tmux.conf"
+	install -d \
+		"${homedir}/.tmux/"
+	ln -Tfs ".dotfiles/tmux/themes" \
+		"${homedir}/.tmux/themes"
 }
 
 FILES_${PN} = "${ROOT_HOME}"
