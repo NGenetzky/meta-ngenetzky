@@ -2,12 +2,13 @@ SUMMARY = "My goal is to utilize existing frameworks to create a modular dotfile
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0a1d42d49e7406a6bdc8bb01e7bc9677"
 
-PR = "r2"
+PR = "r3"
 
 SRC_URI = "\
 	git://github.com/NGenetzky/dotfiles.git;destsuffix=${PN}-${PV} \
 "
 SRCREV = "3260b8cbb7ea36e4806801d2fd094bb6398e88d5"
+LS_COLORS_SRCREV = "73965bdb95f2637f5f7271571ea2595d542cb66f"
 
 do_compile() {
 	local homedir="${B}/home/"
@@ -28,6 +29,9 @@ do_compile() {
 		"${homedir}/.bash_it"
 	ln -sfT "../.dotfiles/bash/bash-it/custom/" \
 		"${homedir}/.bash_it/custom"
+    # dircolors
+    wget "https://raw.github.com/trapd00r/LS_COLORS/${LS_COLORS_SRCREV}/LS_COLORS" \
+        -O "${homedir}/.dircolors"
 	# tmux
 	install -d \
 		"${homedir}/.tmux/"
