@@ -23,8 +23,9 @@ IMAGE_INSTALL_append = "\
 
 IMAGE_INSTALL_append = "\
     bash-it \
-    tpm \
     dotfiles \
+    spacevim \
+    tpm \
 "
 
 inherit core-image
