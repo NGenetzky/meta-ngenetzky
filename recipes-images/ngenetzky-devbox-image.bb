@@ -1,6 +1,6 @@
 SUMMARY = "Small yet usable docker devbox."
 PV = "1.0"
-PV = "r0"
+PV = "r1"
 
 IMAGE_FEATURES += "splash ssh-server-openssh"
 
@@ -19,6 +19,8 @@ IMAGE_INSTALL_append = "\
 "
 
 IMAGE_INSTALL_append = "\
+    bash-it \
+    tpm \
     dotfiles \
 "
 
