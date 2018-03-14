@@ -57,3 +57,6 @@ do_install() {
 		"${S}/vimrc"
 }
 
+# These are required for dein.vim.
+RDEPENDS_${PN} += "git git-perltools"
+
