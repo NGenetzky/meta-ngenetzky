@@ -22,6 +22,7 @@ bitbake_setup_external()
 do_fetch()
 {
     local rev="${1-pyro}"
+    local groups="${2-poky,oe,rpi}"
 
     local yoctodir="${WORKDIR?}/yocto/"
     mkdir -p "${yoctodir}"
@@ -29,7 +30,7 @@ do_fetch()
     repo init \
         --manifest-url=git://github.com/ngenetzky/yocto-manifests.git \
         -b "${rev}" \
-        --groups=poky,oe
+        --groups="${groups}"
     repo sync -j 4
     popd
 }
