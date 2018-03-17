@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 PV = "0.0.1"
-PR = "r1"
+PR = "r2"
 
 inherit core-image
 
@@ -20,7 +20,11 @@ IMAGE_INSTALL = "\
 "
 
 IMAGE_INSTALL += "\
+	ngenetzky-api-html2 \
 	oas2-petstore-html \
+	python3-jatdb \
+	python3-jatdb-server \
+	python3-ngenetzky-api-server \
 	python3-oas2-petstore \
 	python3-oas2-petstore-server \
 "
