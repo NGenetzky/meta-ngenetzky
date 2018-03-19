@@ -40,6 +40,7 @@ gen_servers() {
   wget --output-document "${filename}" "${url}"
 }
 
+do_generator_input[dirs] = "${SWAGGER_DIR}/in"
 addtask do_generator_input after do_prepare_recipe_sysroot before do_patch
 do_generator_input() {
     local i="${SWAGGER_DIR}/in"
@@ -50,6 +51,8 @@ do_generator_input() {
     get_post_data | edit_post_data > "${i}/post-data.json"
 }
 
+
+do_generator_output[dirs] = "${SWAGGER_DIR}/out"
 addtask do_generator_output after do_generator_input before do_patch
 do_generator_output() {
     set -ex
@@ -60,5 +63,13 @@ do_generator_output() {
     unzip \
         -d "${o}" \
         "${f}"
+}
+
+SSTATETASKS += "do_generator_output"
+do_generator_output[sstate-inputdirs] = "${SWAGGER_DIR}/in"
+do_generator_output[sstate-outputdirs] = "${SWAGGER_DIR}/out"
+addtask do_generator_output_setscene
+python do_generator_output_setscene () {
+    sstate_setscene(d)
 }
 
