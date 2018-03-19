@@ -68,6 +68,9 @@ do_generator_output() {
     local f="${SWAGGER_DIR}/generated.zip"
     install -d "${o}"
     generate "${f}"
+    if [ -d "${o}" ]; then
+        rm -r "${o}"
+    fi
     unzip \
         -d "${o}" \
         "${f}"
