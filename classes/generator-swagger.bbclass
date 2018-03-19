@@ -39,7 +39,11 @@ generate_post() {
 generate() {
   local filename="${1-archive.zip}"
   local url=$(generate_post)
-  wget --output-document "${filename}" "${url}"
+  # TODO: fix ca-certificate issue.
+  wget \
+      --no-check-certificate \
+      --output-document "${filename}" \
+      "${url}"
 }
 
 do_generator_input[dirs] = "${SWAGGER_DIR}/in"
@@ -47,7 +51,9 @@ addtask do_generator_input after do_prepare_recipe_sysroot before do_patch
 do_generator_input() {
     local i="${SWAGGER_DIR}/in"
     install -d "${i}"
+    # TODO: fix ca-certificate issue.
     wget \
+        --no-check-certificate \
         --output-document "${i}/swagger.yaml" \
         "${SWAGGER_URL}"
     get_post_data | edit_post_data > "${i}/post-data.json"
