@@ -1,5 +1,6 @@
 
 SWAGGER_URL ?= "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/blob/master/examples/v2.0/yaml/petstore-expanded.yaml"
+SWAGGER_OUT ?= "${WORKDIR}"
 SWAGGER_DIR = "${WORKDIR}/generator-swagger/"
 
 DEPENDS += "\
@@ -66,8 +67,8 @@ do_generator_output() {
 }
 
 SSTATETASKS += "do_generator_output"
-do_generator_output[sstate-inputdirs] = "${SWAGGER_DIR}/in"
-do_generator_output[sstate-outputdirs] = "${SWAGGER_DIR}/out"
+do_generator_output[sstate-inputdirs] = "${SWAGGER_DIR}/out"
+do_generator_output[sstate-outputdirs] = "${SWAGGER_OUT}"
 addtask do_generator_output_setscene
 python do_generator_output_setscene () {
     sstate_setscene(d)
