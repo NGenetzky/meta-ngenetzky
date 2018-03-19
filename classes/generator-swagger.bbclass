@@ -1,6 +1,7 @@
 
 SWAGGER_URL ?= "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/blob/master/examples/v2.0/yaml/petstore-expanded.yaml"
 SWAGGER_OUT ?= "${WORKDIR}"
+SWAGGER_ENDPOINT ?= "servers/python-flask/"
 SWAGGER_DIR = "${WORKDIR}/generator-swagger/"
 
 DEPENDS += "\
@@ -9,6 +10,7 @@ DEPENDS += "\
     unzip-native \
 "
 
+# TODO: Using jq is ugly, use python.
 get_post_data() {
   jq --null-input \
      --arg swagger_url "${SWAGGER_URL}" \
@@ -21,23 +23,22 @@ edit_post_data() {
      '. | .options.serverPort=$serverPort'
 }
 
-post_gen_servers() {
-    # local server_port="80"
-    local options="$(cat ${SWAGGER_DIR}/in/post-data.json)"
+generate_post() {
+    local data="$(cat ${SWAGGER_DIR}/in/post-data.json)"
     local gen_reply=$(curl -X POST \
-    "http://generator.swagger.io/api/gen/servers/python-flask" \
+    "http://generator.swagger.io/api/gen/${SWAGGER_ENDPOINT}" \
     -H  "accept: application/json" \
     -H  "content-type: application/json" \
-    -d "${options}" \
+    -d "${data}" \
     ) || return $?
     # TODO: Error Checking
     # gen_reply={"code":1,"type":"error","message":"The swagger specification supplied was not valid"}
     echo $gen_reply | jq --raw-output .link
 }
 
-gen_servers() {
+generate() {
   local filename="${1-archive.zip}"
-  local url=$(post_gen_servers)
+  local url=$(generate_post)
   wget --output-document "${filename}" "${url}"
 }
 
@@ -58,9 +59,9 @@ addtask do_generator_output after do_generator_input before do_patch
 do_generator_output() {
     set -ex
     local o="${SWAGGER_DIR}/out"
-    local f="${WORKDIR}/python-flask-generated.zip"
+    local f="${SWAGGER_DIR}/generated.zip"
     install -d "${o}"
-    gen_servers "${f}"
+    generate "${f}"
     unzip \
         -d "${o}" \
         "${f}"
