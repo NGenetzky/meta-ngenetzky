@@ -13,10 +13,8 @@ DOCKERFILE_TAG ?= "${PV}-${PR}"
 DEPENDS = "\
 	${DOCKERFILE_IMAGE} \
 "
-fetch_images[depends] = "\
-	${DOCKERFILE_IMAGE}:do_image_tar \
-"
-addtask fetch_images after do_fetch before do_compile
+do_fetch_images[depends] = "${DOCKERFILE_IMAGE}:do_image_complete"
+addtask do_fetch_images after do_fetch before do_compile
 do_fetch_images() {
 	local imagesdir="${S}/${DOCKERFILE_REPO}/images/"
 	install -d \
