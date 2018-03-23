@@ -1,11 +1,11 @@
 require oas2-petstore.inc
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 inherit allarch
 
 inherit generator-swagger
-SWAGGER_ENDPOINT = "clients/html"
-S = "${WORKDIR}/html-client"
+SWAGGER_ENDPOINT = "clients/html2"
+S = "${WORKDIR}/html2-client"
 
 edit_post_data() {
     # html2
