@@ -19,3 +19,9 @@ IMAGE_INSTALL = "\
 	packagegroup-core-full-cmdline \
 "
 
+IMAGE_INSTALL += "\
+	oas2-petstore-html \
+	python3-oas2-petstore \
+	python3-oas2-petstore-server \
+"
+
