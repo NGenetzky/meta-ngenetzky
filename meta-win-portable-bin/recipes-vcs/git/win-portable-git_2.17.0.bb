@@ -1,7 +1,8 @@
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+SUMMARY = "Git for Windows, the Windows port of Git."
+LICENSE = "GPL-2.0"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
-PR = "r1"
+PR = "r2"
 
 inherit win-portable
 
@@ -18,12 +19,12 @@ DEPENDS = " p7zip-native "
 FILES_${PN} = "PortableApps/GitPortable/"
 do_install() {
     local portabledir="${D}/PortableApps/GitPortable/"
-    local appdir="${portabledir}/App/"
+    local appdir="${portabledir}/App/Git/"
 
     install -d \
         "${appdir}"
     cp -R --no-target-directory \
-        "${WORKDIR}/GitPortable/" \
+        "${WORKDIR}/GitPortable/GitPortable/" \
         "${portabledir}"
     7z x \
         -o"${appdir}" \
