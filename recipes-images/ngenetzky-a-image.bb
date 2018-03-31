@@ -8,3 +8,11 @@ PR = "r1"
 
 inherit image-from-scratch
 IMAGE_FSTYPES += "tar.xz"
+
+IMAGE_INSTALL = "\
+    appimage-etcher \
+    appimage-gvim \
+    appimage-neovim \
+    appimage-vlc \
+"
+
