@@ -63,11 +63,28 @@ yocto_bitbake() {
     --workdir=/workdir
 }
 
+yocto_toaster() {
+  local runargs=""
+  # --env-file "${ENV_FILE?}"
+  docker run \
+    --rm -it \
+    -p 127.0.0.1:18000:8000 \
+    -v ${WORKDIR?}:/workdir \
+    -v "${WORKDIR?}/yocto/layers/poky/:/home/usersetup/poky/" \
+    -v ${DL_DIR?}:/mnt/downloads \
+    -v ${SSTATE_CACHE?}:/mnt/sstate-cache \
+    -v ${GITROOT?}:/mnt/meta-ngenetzky \
+    $@ \
+    crops/toaster \
+    --workdir=/workdir
+}
+
 main(){
   yocto_setup "${1?}"
   yocto_fetch
   yocto_conf
-  yocto_bitbake
+  # yocto_bitbake
+  yocto_toaster
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
