@@ -5,6 +5,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 
 PR = "r1"
 
+inherit appimage_package
+
 # Custom Variable:
 SRCFILENAME = "gvim-${PV}-x86_64.AppImage"
 
@@ -23,9 +25,5 @@ do_install() {
         "${WORKDIR}/${fname}"
     ln -fsT \
         "${fname}" \
-        "${dest}/gvim" 
+        "${dest}/gvim"
 }
-
-RDEPENDS = ""
-INSANE_SKIP_${PN} = "already-stripped"
-

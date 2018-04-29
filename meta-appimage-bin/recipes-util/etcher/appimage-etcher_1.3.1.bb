@@ -5,6 +5,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7ca
 
 PR = "r1"
 
+inherit appimage_package
+
 SRC_URI = " \
     https://github.com/resin-io/etcher/releases/download/v${PV}/etcher-${PV}-linux-x86_64.zip \
 "
@@ -20,9 +22,5 @@ do_install() {
         "${WORKDIR}/${fname}"
     ln -fsT \
         "${fname}" \
-        "${dest}/etcher" 
+        "${dest}/etcher"
 }
-
-RDEPENDS = ""
-INSANE_SKIP_${PN} = "already-stripped"
-
