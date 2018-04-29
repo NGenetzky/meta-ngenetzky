@@ -5,6 +5,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7ca
 
 PR = "r1"
 
+inherit appimage_package
+
 # Custom Variable:
 SRCFILENAME = "nvim-${PV}-x86_64.AppImage"
 
@@ -23,9 +25,5 @@ do_install() {
         "${WORKDIR}/${fname}"
     ln -fsT \
         "${fname}" \
-        "${dest}/nvim" 
+        "${dest}/nvim"
 }
-
-RDEPENDS = ""
-INSANE_SKIP_${PN} = "already-stripped"
-
