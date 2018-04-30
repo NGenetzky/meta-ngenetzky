@@ -1,5 +1,5 @@
 require oas2-petstore.inc
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 inherit generator-swagger
 SWAGGER_ENDPOINT = "servers/python-flask"
@@ -24,4 +24,35 @@ edit_post_data() {
 }
 
 inherit setuptools3
+
+PACKAGES += "${PN}-src"
+FILES_${PN}-src = "/usr/src/${PN}"
+addtask do_src_install after do_install before do_package
+do_src_install(){
+    local d="${D}/usr/src/${PN}"
+    install -d \
+        "${d}"
+    cp -R --no-target-directory --no-preserve ownership \ 
+        "${B}/${APPNAME}_server" \
+        "${d}/${APPNAME}_server"
+
+    install -m 664 --target-directory "${d}" \
+        "${B}/Dockerfile" \
+        "${B}/requirements.txt" \
+        "${B}/setup.py"
+}
+
+inherit deploy
+addtask do_deploy after do_src_install
+do_deploy[dirs] = "${DEPLOYDIR} ${D}/usr/src/${PN}"
+do_deploy() {
+    local shortname="${PN}"
+    local longname="${shortname}_${PV}-${PR}"
+    local ext=".tar.xz"
+    tar --create --xz \
+        --file "${DEPLOYDIR}/${longname}${ext}" \
+        *
+    ln -sT "${longname}${ext}" \
+        "${DEPLOYDIR}/${shortname}${ext}"
+}
 
