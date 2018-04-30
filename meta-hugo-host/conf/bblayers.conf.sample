@@ -9,4 +9,5 @@ BBLAYERS ?= " \
   ##OEROOT##/meta \
   ##OEROOT##/meta-poky \
   ##OEROOT##/meta-yocto-bsp \
+  /mnt/meta-ngenetzky/meta-hugo-host \
   "
