@@ -1,0 +1,44 @@
+version: "3.2"
+services:
+  toaster:
+    image: crops/toaster
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    volumes:
+
+      - type: volume
+        source: mydata
+        target: /data
+        volume:
+          nocopy: true
+
+      # - type: bind
+      #   source: ./workdir
+      #   target: /workdir
+
+      - type: bind
+        source: ./data/yocto/downloads
+        target: /mnt/downloads
+
+      - type: bind
+        source: ./data/yocto/sstate-cache
+        target: /mnt/sstate-cache
+
+      - type: bind
+        source: /data/yocto/2.4/e/
+        target: /workdir/
+
+      - type: bind
+        source: ./
+        target: /mnt/meta-ngenetzky/
+
+      - type: bind
+        source: /opt/yocto
+        target: /opt/yocto
+
+# networks:
+
+volumes:
+  mydata:
