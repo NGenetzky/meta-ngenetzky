@@ -1,25 +1,10 @@
 
 GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
 
-do_fetch()
-{
-    local rev="${1-pyro}"
-    local groups="${2-poky}"
+source "${GITROOT}/scripts/yocto.bash"
 
-    local yoctodir="${WORKDIR-.}/yocto/"
-    mkdir -p "${yoctodir}"
-    pushd "${yoctodir}"
-    repo init \
-        --manifest-url=git://github.com/ngenetzky/yocto-manifests.git \
-        -b "${rev}" \
-        --groups="${groups}"
-    repo sync -j 4
-    popd
-}
-
-main()
-{
-    do_fetch "$@"
+main() {
+    yocto_fetch "$@"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
