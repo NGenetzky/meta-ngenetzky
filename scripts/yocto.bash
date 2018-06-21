@@ -1,11 +1,11 @@
 
 GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
+DL_DIR="/data/yocto/downloads"
+SSTATE_CACHE="/data/yocto/sstate-cache"
 
 yocto_setup() {
   local workdir="${1?}"
 
-  export DL_DIR="/data/ngenetzky/yocto-downloads"
-  export SSTATE_CACHE="/data/ngenetzky/yocto-sstate-cache"
   export WORKDIR=${workdir}
 
   mkdir -p "${workdir}/yocto"
@@ -65,8 +65,8 @@ yocto_bitbake() {
 
 main(){
   yocto_setup "${1?}"
-  yocto_fetch
-  yocto_conf
+  yocto_fetch "rocko"
+  yocto_conf 'basic'
   yocto_bitbake
 }
 
