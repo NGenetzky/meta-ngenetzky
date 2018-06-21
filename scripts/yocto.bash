@@ -28,8 +28,11 @@ yocto_fetch() {
   local yoctodir="${workdir}/yocto/${rev}"
   mkdir -p "${yoctodir}"
   ln -Tfs \
-    "${rev}" \
+    "${rev}/layers" \
     "${workdir}/yocto/layers"
+  ln -Tfs \
+    "${rev}/poky" \
+    "${workdir}/yocto/poky"
 
   pushd "${yoctodir}"
   repo init \
@@ -65,8 +68,8 @@ yocto_bitbake() {
 
 main(){
   yocto_setup "${1?}"
-  yocto_fetch "rocko"
-  yocto_conf 'basic'
+  yocto_fetch 'rocko' 'poky,oe'
+  yocto_conf 'x86-64'
   yocto_bitbake
 }
 
