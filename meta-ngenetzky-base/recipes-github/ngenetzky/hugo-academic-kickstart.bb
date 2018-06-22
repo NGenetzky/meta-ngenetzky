@@ -1,6 +1,6 @@
 SUMMARY = "Static Website Powered by the Academic theme for Hugo."
 PV = "2018.06.10"
-PR = "r2"
+PR = "r3"
 
 inherit bb_fetcher
 addtask do_unpack before do_build
@@ -20,6 +20,7 @@ DATA_JSON_TREE_FILES = "\
 inherit git_data
 addtask do_git_data_log after do_unpack before do_build
 addtask do_git_data_log_stat after do_unpack before do_build
+addtask do_git_data_other after do_unpack before do_build
 
 B = "${S}/public"
 do_build[dirs] = "${S}"
