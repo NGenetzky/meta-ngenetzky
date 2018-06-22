@@ -14,7 +14,6 @@ addtask do_data_json_tree after do_unpack before do_build
 DATA_JSON_TREE_FILES = "\
     ./ \
     ./meta-openapi \
-    ./static \
     ./classes \
 "
 
