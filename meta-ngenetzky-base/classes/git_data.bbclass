@@ -4,6 +4,7 @@ GIT_DATA_D ?= "${WORKDIR}/data/"
 GIT_DATA_FILES ?= "\
     ./ \
 "
+GIT_DATA_REF_A ?= "HEAD"
 
 git_log_2_json(){
     # https://gist.githubusercontent.com/textarcana/1306223/raw/43a641db975e5f62ffe4dc44dacfe1fb157677d6/git-log2json.sh
@@ -25,7 +26,7 @@ do_git_data_log() {
             set -x
             cd "${S}/${f}"
             git_log_2_json \
-                > "${DATA_JSON_TREE_D}/${f}.git_log.json"
+                > "${GIT_DATA_D}/${f}.git_log.json"
         )
     done
 }
@@ -67,7 +68,30 @@ do_git_data_log_stat() {
             cd "${S}/${f}"
             git_log_stat_2_json \
                 | jq . \
-                > "${DATA_JSON_TREE_D}/${f}.git_log_stat.json"
+                > "${GIT_DATA_D}/${f}.git_log_stat.json"
         )
+    done
+}
+
+git_other(){
+    (
+    set -x
+    local ref_a='${GIT_DATA_REF_A}'
+    git rev-parse "${ref_a}"
+    git cherry -v "${ref_a}"
+    git branch -a --contains "${ref_a}"
+    git branch -a --merged "${ref_a}"
+    git branch -a -v
+    )
+}
+
+addtask git_data_other
+git_data_other[nostamp] = "1"
+do_git_data_other() {
+    install -d \
+        "${GIT_DATA_D}"
+    for f in ${GIT_DATA_FILES}; do
+        cd "${S}/${f}"
+        git_other > "${DATA_JSON_TREE_D}/${f}.other.txt" 2>&1
     done
 }
