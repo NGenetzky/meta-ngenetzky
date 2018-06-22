@@ -5,7 +5,7 @@ DATA_JSON_TREE_FILES ?= "\
     ./ \
 "
 
-addtask showdata
+addtask do_data_json_tree
 do_data_json_tree[nostamp] = "1"
 do_data_json_tree() {
     install -d \
