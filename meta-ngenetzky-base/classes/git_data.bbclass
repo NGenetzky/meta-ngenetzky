@@ -15,7 +15,7 @@ git_log_2_json(){
         perl -pe 's/},]/}]/'
 }
 
-addtask showdata
+addtask git_data_log
 git_data_log[nostamp] = "1"
 do_git_data_log() {
     install -d \
@@ -56,7 +56,7 @@ git_log_stat_2_json(){
         perl -wpe 's#,\s*?}$#}#'
 }
 
-addtask showdata
+addtask git_data_log_stat
 git_data_log_stat[nostamp] = "1"
 do_git_data_log_stat() {
     install -d \
