@@ -65,4 +65,13 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 
     set -x
     main "$@"
+else
+    # Use a subshell to not affect user's shell.
+    (
+      # Bash Strict Mode
+      set -eu -o pipefail
+
+      set -x
+      main "$@"
+    )
 fi
