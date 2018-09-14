@@ -1,13 +1,7 @@
+inherit bb_fetcher
+addtask do_unpack before do_build
 
-DEPENDS += "\
-    glib-2.0 \
-    zlib \
-"
+D ??= "${TOPDIR}/sysroot/appimage"
+bindir ??= "bin"
 
-do_compile[noexec] = "1"
-do_configure[noexec] = "1"
-
-# INSANE_SKIP_${PN} += "build-deps"
-INSANE_SKIP_${PN} += "file-rdeps"
-INSANE_SKIP_${PN} += "already-stripped"
-
+addtask do_install before do_build
