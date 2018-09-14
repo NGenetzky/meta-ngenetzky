@@ -1,7 +1,7 @@
+inherit bb_fetcher
+addtask do_unpack before do_build
 
-# TODO: Do we need to consider "x86"?
-PACKAGE_ARCH = "x86_64"
+D ??= "${TOPDIR}/sysroot/appimage"
+bindir ??= "bin"
 
-# All RDEPENDS are prepackaged.
-INSANE_SKIP_${PN} += "file-rdeps"
-
+addtask do_install before do_build

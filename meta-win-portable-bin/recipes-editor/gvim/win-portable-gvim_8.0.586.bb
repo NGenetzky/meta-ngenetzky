@@ -12,7 +12,7 @@ SRC_URI = "\
 SRC_URI[md5sum] = "2c3c21383cefc5dc4426ec2dcaa02ba4"
 SRC_URI[sha256sum] = "ba732d9bb6d2abd553d1255586df6eb43b7307376f659db0c10c02a23e6a4aff"
 
-DEPENDS = " p7zip-native "
+# DEPENDS = " p7zip-native "
 
 FILES_${PN} = "PortableApps/gVimPortable/"
 do_install() {
