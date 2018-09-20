@@ -21,25 +21,10 @@ console(){
         --workdir="/workspace/"
 }
 
-def export_func_shell(func, d, runfile, cwd=None):
-    """Execute a shell function from the metadata
-
-    Note on directory behavior.  The 'dirs' varflag should contain a list
-    of the directories you need created prior to execution.  The last
-    item in the list is where we will chdir/cd to.
-    """
-    with open(runfile, 'w') as script:
-        bb.data.emit_func(func, script, d)
-
-        if bb.msg.loggerVerboseLogs:
-            script.write("set -x\n")
-        if cwd:
-            script.write("cd '%s'\n" % cwd)
-        script.write("%s\n" % func)
-
-do_generate_scripts[nostamp] = "1"
-addtask do_generate_scripts before do_build
-python do_generate_scripts(){
+inherit bb_build_shell
+do_build_shell_scripts[nostamp] = "1"
+addtask do_build_shell_scripts before do_build
+python do_build_shell_scripts(){
     workdir = d.getVar('WORKDIR', expand=True)
     export_func_shell('console', d, os.path.join(workdir, 'console.sh'), workdir)
 }
