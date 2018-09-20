@@ -41,6 +41,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 else
   main
   bitbake_set_path "${BITBAKE_DIR}"
+  export BBPATH="${BUILD_DIR}"
   cd "${BUILD_DIR}"
 
   unset bitbake_clone
