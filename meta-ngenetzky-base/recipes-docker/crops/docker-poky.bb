@@ -8,15 +8,15 @@ SRCREV = "34bfd7512c8f4c92a8a1934f2b7af9bf0a3084d4"
 SRC_URI = "git://github.com/crops/poky-container.git"
 S = "${WORKDIR}/git"
 
-DOCKER_REPOSITORY = "meta-ngenetzky/${PN}"
-DOCKER_TAG = "${PV}-${PR}"
+inherit docker
 
 console(){
     local name="${PN}"
     docker run -it \
         --rm \
         --name "${name}" \
-        --volume "${TOPDIR}:/workspace/" \
+        --volume "${@docker_volume_path(d,'poky')}:/workspace" \
+        --volume "${TOPDIR}:/mnt/topdir:ro" \
         "${DOCKER_REPOSITORY}:${DOCKER_TAG}" \
         --workdir="/workspace/"
 }

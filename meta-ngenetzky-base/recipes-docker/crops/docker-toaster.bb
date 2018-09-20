@@ -8,15 +8,15 @@ SRCREV = "17c4585d1a2e3874ea55393a676f6043559b949a"
 SRC_URI = "git://github.com/crops/toaster-container.git"
 S = "${WORKDIR}/git"
 
-DOCKER_REPOSITORY = "meta-ngenetzky/${PN}"
-DOCKER_TAG = "${PV}-${PR}"
+inherit docker
 
 server(){
     local name="${PN}"
     docker run \
         --rm -it \
         --name "${name}" \
-        --volume "${TOPDIR}:/workdir" \
+        --volume "${@docker_volume_path(d,'toaster')}:/workdir" \
+        --volume "${TOPDIR}:/mnt/topdir:ro" \
         --publish "0.0.0.0:18000:8000" \
         "${DOCKER_REPOSITORY}:${DOCKER_TAG}"
 }

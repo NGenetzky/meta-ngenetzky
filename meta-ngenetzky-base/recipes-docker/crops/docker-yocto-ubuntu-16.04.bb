@@ -7,8 +7,7 @@ addtask do_unpack before do_build
 SRCREV = "2459fd0772ea8461393253ff4bd5e377b9004680"
 SRC_URI = "git://github.com/crops/yocto-dockerfiles.git;subpath=;destsuffix=${PN}-${PV}"
 
-DOCKER_REPOSITORY = "meta-ngenetzky/${PN}"
-DOCKER_TAG = "${PV}-${PR}"
+inherit docker
 
 do_build[dirs] = "${S}"
 do_build(){
