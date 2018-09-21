@@ -3,10 +3,23 @@
 
 SUMMARY = "Build using Poky"
 PV = "2.4"
-PR = "r0"
+PR = "r1"
 
 B = "${WORKDIR}/build"
-SH_CONSOLE = ". ${S}/poky/oe-init-build-env ${B} ${S}/poky/bitbake"
+
+console(){
+    . "${S}/poky/oe-init-build-env" \
+        "${B}" \
+        "${S}/poky/bitbake"
+}
+
+inherit bb_build_shell
+do_build_shell_scripts[nostamp] = "1"
+addtask do_build_shell_scripts before do_build
+python do_build_shell_scripts(){
+    workdir = d.getVar('WORKDIR', expand=True)
+    export_func_shell('console', d, os.path.join(workdir, 'console.sh'), workdir)
+}
 
 do_build[depends] = "\
     poky:do_unpack \
@@ -18,6 +31,4 @@ do_build(){
     ln -sfT \
         ${TOPDIR}/tmp/work/poky-${poky_pv}*/git/ \
         "${S}/poky"
-
-    echo "${SH_CONSOLE}" > ${S}/console.sh
 }
