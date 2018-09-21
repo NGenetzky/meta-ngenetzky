@@ -3,9 +3,37 @@
 
 SUMMARY = "Build using meta-ngenetzky"
 PV = "2018.09.20"
-PR = "r0"
+PR = "r1"
 
 B = "${WORKDIR}/build"
+
+inherit bb_fetcher
+addtask do_unpack before do_setup_conf
+SRC_URI = "\
+    file://local.conf \
+    file://bblayers.conf \
+"
+
+do_setup_conf[nostamp] = "${B}/conf ${WORKDIR}"
+do_setup_conf[dirs] = "${B}/conf ${WORKDIR}"
+addtask do_setup_conf before do_build
+python do_setup_conf(){
+    workdir = d.getVar('WORKDIR')
+    bdir = d.getVar('B')
+
+    with open(os.path.join(workdir, 'bblayers.conf'), 'r') as conf:
+        bblayers = conf.read()
+    with open(os.path.join(workdir, 'local.conf'), 'r') as conf:
+        local = conf.read()
+
+    for var in [ 'S', 'B']:
+        bblayers = bblayers.replace('{{ '+var+' }}', d.getVar(var))
+
+    with open(os.path.join(bdir, 'conf', 'bblayers.conf'), 'w') as conf:
+        conf.write(bblayers)
+    with open(os.path.join(bdir, 'conf', 'local.conf'), 'w') as conf:
+        conf.write(local)
+}
 
 bitbake_set_path(){
     local p="$(readlink -f ${1?})"
