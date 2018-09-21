@@ -2,7 +2,7 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "Build using Poky"
-INC_PR = "r3"
+INC_PR = "r4"
 
 B = "${WORKDIR}/build"
 YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
@@ -10,12 +10,23 @@ YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
 inherit bb_fetcher
 addtask do_unpack before do_setup_conf
 SRC_URI = "\
-    file://local.conf \
     file://bblayers.conf \
+    file://local.conf \
+    file://site.conf \
 "
 
 inherit bitbake_conf
 addtask do_bitbake_conf_template after do_unpack before do_build
+python do_bitbake_conf_template_append(){
+    with open(os.path.join(templateconf, 'site.conf'), 'r') as conf:
+        site = conf.read()
+
+    for var in [ 'S', 'B']:
+        bblayers = site.replace('{{ '+var+' }}', d.getVar(var))
+
+    with open(os.path.join(buildconf, 'site.conf'), 'w') as conf:
+        conf.write(site)
+}
 
 console(){
     . "${S}/poky/oe-init-build-env" \
