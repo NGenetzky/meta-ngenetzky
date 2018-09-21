@@ -2,9 +2,19 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "Build using Poky"
-INC_PR = "r1"
+INC_PR = "r2"
 
 B = "${WORKDIR}/build"
+
+inherit bb_fetcher
+addtask do_unpack before do_setup_conf
+SRC_URI = "\
+    file://local.conf \
+    file://bblayers.conf \
+"
+
+inherit bitbake_conf
+addtask do_bitbake_conf_template after do_unpack before do_build
 
 console(){
     . "${S}/poky/oe-init-build-env" \
