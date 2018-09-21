@@ -3,18 +3,19 @@
 
 SUMMARY = "Docker import Yocto Poky core-image-minimal"
 PV = "2.4"
-PR = "r1"
+PR = "r0"
+
+DI_BUILDER = "bitbake-poky-2.4-r0"
+DI_MACHINE = "qemux86"
+DI_IMAGE = "core-image-minimal-qemux86.tar.bz2"
 
 addtask do_fetch before do_build
 do_fetch(){
-    local builddir="${TOPDIR}/tmp/work/bitbake-poky-2.4-r0/build/"
+    local builddir="${TOPDIR}/tmp/work/${DI_BUILDER}/build/"
+    local imgdeploydir="${builddir}/tmp/deploy/images/${DI_MACHINE}/"
     cp -T \
-        "${builddir}/tmp/deploy/images/qemux86/core-image-minimal-qemux86.tar.bz2" \
-        "${WORKDIR}/core-image-minimal.tar.bz2"
-    # local builddir="${TOPDIR}/tmp/work/bitbake-poky-docker-from-scratch-2.4-r2.1/build/"
-    # cp -T \
-    #     "${builddir}/tmp/deploy/images/genericx86-64/core-image-minimal-genericx86-64.tar.xz" \
-    #     "${WORKDIR}/core-image-minimal.tar.xz"
+        "${imgdeploydir}/${DI_IMAGE}" \
+        "${WORKDIR}/${DI_IMAGE}"
 }
 
 inherit docker
@@ -39,12 +40,8 @@ python do_build_shell_scripts(){
 do_build[dirs] = "${S}"
 do_build(){
     docker import \
-        "${WORKDIR}/core-image-minimal.tar.bz2" \
+        "${WORKDIR}/${DI_IMAGE}" \
         "${DOCKER_REPOSITORY}:${DOCKER_TAG}"
-
-    # docker import \
-    #     "${WORKDIR}/core-image-minimal.tar.xz" \
-    #     "${DOCKER_REPOSITORY}:${DOCKER_TAG}"
 
     docker image inspect \
         "${DOCKER_REPOSITORY}:${DOCKER_TAG}"
