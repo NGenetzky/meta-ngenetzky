@@ -2,7 +2,7 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "Build using Poky"
-INC_PR = "r4"
+INC_PR = "r5"
 
 B = "${WORKDIR}/build"
 YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
@@ -21,8 +21,8 @@ python do_bitbake_conf_template_append(){
     with open(os.path.join(templateconf, 'site.conf'), 'r') as conf:
         site = conf.read()
 
-    for var in [ 'S', 'B']:
-        bblayers = site.replace('{{ '+var+' }}', d.getVar(var))
+    for var in [ 'S', 'B', 'YOCTO_CACHE_DIR']:
+        site = site.replace('{{ '+var+' }}', d.getVar(var))
 
     with open(os.path.join(buildconf, 'site.conf'), 'w') as conf:
         conf.write(site)
