@@ -2,8 +2,7 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "Build using Poky"
-PV = "2.4"
-PR = "r1"
+INC_PR = "r1"
 
 B = "${WORKDIR}/build"
 
@@ -26,7 +25,7 @@ do_build[depends] = "\
 "
 do_build[dirs] = "${S} ${B}"
 do_build(){
-    local poky_pv='2.4'
+    local poky_pv='${PV}'
 
     ln -sfT \
         ${TOPDIR}/tmp/work/poky-${poky_pv}*/git/ \
