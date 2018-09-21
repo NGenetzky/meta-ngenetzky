@@ -3,10 +3,24 @@
 
 SUMMARY = "Build using OpenEmbedded"
 PV = "2.4"
-PR = "r0"
+PR = "r1"
 
 B = "${WORKDIR}/build"
-SH_CONSOLE = ". ${S}/openembedded-core/oe-init-build-env ${B} ${S}/bitbake"
+
+console(){
+    . "${S}/openembedded-core/oe-init-build-env" \
+        "${B}" \
+        "${S}/bitbake"
+}
+
+inherit bb_build_shell
+do_build_shell_scripts[nostamp] = "1"
+addtask do_build_shell_scripts before do_build
+python do_build_shell_scripts(){
+    workdir = d.getVar('WORKDIR', expand=True)
+    # srcdir = d.getVar('S', expand=True)
+    export_func_shell('console', d, os.path.join(workdir, 'console.sh'), workdir)
+}
 
 do_build[depends] = "\
     bitbake:do_unpack \
@@ -24,5 +38,4 @@ do_build(){
     ln -sfT \
         ${TOPDIR}/tmp/work/openembedded-core-${oecore_pv}*/git/ \
         "${S}/openembedded-core"
-    echo "${SH_CONSOLE}" > ${S}/console.sh
 }
