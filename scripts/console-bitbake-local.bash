@@ -12,6 +12,7 @@ bitbake_set_path(){
 }
 
 bitbake_set_path "${BITBAKE_DIR}"
+export BBPATH="${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
 unset bitbake_set_path
