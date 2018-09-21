@@ -15,7 +15,7 @@ SRC_URI = "\
 "
 
 inherit bitbake_conf
-addtask do_setup_conf before do_build
+addtask do_bitbake_conf_template after do_unpack before do_build
 
 bitbake_set_path(){
     local p="$(readlink -f ${1?})"
