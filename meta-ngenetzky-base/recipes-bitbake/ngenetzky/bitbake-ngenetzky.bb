@@ -3,7 +3,7 @@
 
 SUMMARY = "Build using meta-ngenetzky"
 PV = "2018.09.20"
-PR = "r2"
+PR = "r3"
 
 B = "${WORKDIR}/build"
 
@@ -30,12 +30,27 @@ console(){
     cd "${B}"
 }
 
+activate(){
+  local dst="${TOPDIR}"
+  local src="${B}"
+  local archivepostfix="$(date +%s)"
+  if [ -d "${dst}/conf" -o -L "${dst}/conf" ]; then
+    mv \
+      "${dst}/conf" \
+      "${dst}/.conf.${archivepostfix}"
+  fi
+  ln -sT \
+    "${src}/conf" \
+    "${dst}/conf"
+}
+
 inherit bb_build_shell
 do_build_shell_scripts[nostamp] = "1"
 addtask do_build_shell_scripts before do_build
 python do_build_shell_scripts(){
     workdir = d.getVar('WORKDIR', expand=True)
     export_func_shell('console', d, os.path.join(workdir, 'console.sh'), workdir)
+    export_func_shell('activate', d, os.path.join(workdir, 'activate.sh'), workdir)
 }
 
 do_build[depends] = "\
