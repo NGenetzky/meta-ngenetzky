@@ -2,9 +2,10 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "Build using Poky"
-INC_PR = "r2"
+INC_PR = "r3"
 
 B = "${WORKDIR}/build"
+YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
 
 inherit bb_fetcher
 addtask do_unpack before do_setup_conf
@@ -28,6 +29,7 @@ addtask do_build_shell_scripts before do_build
 python do_build_shell_scripts(){
     workdir = d.getVar('WORKDIR', expand=True)
     export_func_shell('console', d, os.path.join(workdir, 'console.sh'), workdir)
+    export_func_shell('do_export_cache', d, os.path.join(workdir, 'do_export_cache.sh'), workdir)
 }
 
 do_build[depends] = "\
@@ -40,4 +42,20 @@ do_build(){
     ln -sfT \
         ${TOPDIR}/tmp/work/poky-${poky_pv}*/git/ \
         "${S}/poky"
+}
+
+do_export_cache[nostamp] = "1"
+do_export_cache[dirs] = "\
+    ${YOCTO_CACHE_DIR}/downloads \
+    ${YOCTO_CACHE_DIR}/sstate-cache \
+    ${B} \
+"
+addtask do_export_cache
+do_export_cache(){
+    cp -T -R \
+        "${B}/downloads" \
+        "${YOCTO_CACHE_DIR}/downloads"
+    cp -T -R \
+        "${B}/sstate-cache" \
+        "${YOCTO_CACHE_DIR}/sstate-cache"
 }
