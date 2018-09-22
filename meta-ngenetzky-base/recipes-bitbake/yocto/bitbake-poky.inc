@@ -63,10 +63,10 @@ do_export_cache[dirs] = "\
 "
 addtask do_export_cache
 do_export_cache(){
-    cp -T -R \
+    rsync -av \
         "${B}/downloads" \
         "${YOCTO_CACHE_DIR}/downloads"
-    cp -T -R \
+    rsync -av \
         "${B}/sstate-cache" \
         "${YOCTO_CACHE_DIR}/sstate-cache"
 }
