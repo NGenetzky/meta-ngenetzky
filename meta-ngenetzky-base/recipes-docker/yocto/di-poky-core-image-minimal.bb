@@ -3,11 +3,11 @@
 
 SUMMARY = "Docker import Yocto Poky core-image-minimal"
 PV = "2.4"
-PR = "r0"
+PR = "r1"
 
-DI_BUILDER = "bitbake-poky-2.4-r0"
-DI_MACHINE = "qemux86"
-DI_IMAGE = "core-image-minimal-qemux86.tar.bz2"
+DI_BUILDER = "bitbake-poky-debian-2.4-r5.0"
+DI_MACHINE = "genericx86-64"
+DI_IMAGE = "core-image-minimal-${DI_MACHINE}.tar.xz"
 
 addtask do_fetch before do_build
 do_fetch(){
