@@ -4,7 +4,7 @@
 require bitbake-oe.inc
 
 PV = "2.4"
-PR = "${INC_PR}.1"
+PR = "${INC_PR}.2"
 
 do_build[depends] += "\
     meta-ngenetzky:do_unpack \
