@@ -4,7 +4,7 @@
 require bitbake-poky.inc
 
 PV = "2.4"
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 do_build[depends] += "\
     meta-ngenetzky:do_unpack \

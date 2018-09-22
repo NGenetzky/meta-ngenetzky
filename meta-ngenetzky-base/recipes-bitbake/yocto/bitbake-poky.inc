@@ -2,7 +2,7 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "Build using Poky"
-INC_PR = "r5"
+INC_PR = "r6"
 
 B = "${WORKDIR}/build"
 YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
@@ -44,15 +44,20 @@ python do_build_shell_scripts(){
 }
 
 do_build[depends] = "\
+    meta-openembedded:do_unpack \
     poky:do_unpack \
 "
 do_build[dirs] = "${S} ${B}"
 do_build(){
     local poky_pv='${PV}'
+    local metaoe_pv='${PV}'
 
     ln -sfT \
         ${TOPDIR}/tmp/work/poky-${poky_pv}*/git/ \
         "${S}/poky"
+    ln -sfT \
+        ${TOPDIR}/tmp/work/meta-openembedded-${metaoe_pv}*/git/ \
+        "${S}/meta-openembedded"
 }
 
 do_export_cache[nostamp] = "1"
