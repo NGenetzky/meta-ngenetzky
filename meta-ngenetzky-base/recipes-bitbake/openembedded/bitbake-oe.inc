@@ -3,9 +3,31 @@
 
 SUMMARY = "Build using OpenEmbedded"
 PV = "2.4"
-INC_PR = "r1"
+INC_PR = "r2"
 
 B = "${WORKDIR}/build"
+YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
+
+inherit bb_fetcher
+addtask do_unpack before do_setup_conf
+SRC_URI = "\
+    file://bblayers.conf \
+    file://local.conf \
+    file://site.conf \
+"
+
+inherit bitbake_conf
+addtask do_bitbake_conf_template after do_unpack before do_build
+python do_bitbake_conf_template_append(){
+    with open(os.path.join(templateconf, 'site.conf'), 'r') as conf:
+        site = conf.read()
+
+    for var in [ 'S', 'B', 'YOCTO_CACHE_DIR']:
+        site = site.replace('{{ '+var+' }}', d.getVar(var))
+
+    with open(os.path.join(buildconf, 'site.conf'), 'w') as conf:
+        conf.write(site)
+}
 
 console(){
     . "${S}/openembedded-core/oe-init-build-env" \
