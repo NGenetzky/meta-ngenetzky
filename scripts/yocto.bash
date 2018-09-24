@@ -1,5 +1,6 @@
 
-GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
+SCRIPTDIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
+GITROOT="${GITROOT-$(readlink -f ${SCRIPTDIR}/../)}"
 DL_DIR="/data/yocto/downloads"
 SSTATE_CACHE="/data/yocto/sstate-cache"
 

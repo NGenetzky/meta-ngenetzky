@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
 OPTDIR="/opt/yocto"
-
-# source "${GITROOT}/scripts/yocto.bash"
 
 mkoptdir() {
   sudo mkdir "${OPTDIR}"

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
+SCRIPTDIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
+GITROOT="${GITROOT-$(readlink -f ${SCRIPTDIR}/../)}"
 WORKDIR="${GITROOT}"
 
 source "${GITROOT}/scripts/yocto.bash"
