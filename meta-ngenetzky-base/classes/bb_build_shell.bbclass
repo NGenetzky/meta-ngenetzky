@@ -8,6 +8,10 @@ def export_func_shell(func, d, runfile, cwd=None):
     References:
         bitbake.bb.build.exec_func_shell()
     """
+    if d.getVar(func) is None:
+        raise bb.fatal('Function ({0}) not defined'.format(func))
+    if cwd is None:
+        cwd = d.getVarFlag(func, 'dirs')
     with open(runfile, 'w') as script:
         bb.data.emit_func(func, script, d)
 
