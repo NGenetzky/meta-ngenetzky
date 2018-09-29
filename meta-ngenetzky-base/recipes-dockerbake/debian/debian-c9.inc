@@ -1,13 +1,13 @@
 build_c9_apps(){
     apt-get update && apt-get install -y \
-            python \
-            build-essential \
-            libssl-dev \
             apache2-utils \
-            libxml2-dev \
-            git \
+            build-essential \
             curl \
+            git \
+            libssl-dev \
+            libxml2-dev \
             locales \
+            python \
             tmux \
         && rm -rf /var/lib/apt/lists/*
 }
@@ -25,15 +25,15 @@ build_c9_c9sdk(){
         && cd /opt/c9sdk \
         && ./scripts/install-sdk.sh
 }
-build_c9_cleanup(){
-    apt-get remove -y \
-            build-essential \
-        && apt-get autoremove -y
-}
+# build_c9_cleanup(){
+#     apt-get remove -y \
+#             build-essential \
+#         && apt-get autoremove -y
+# }
 build_c9(){
     build_c9_apps
     build_c9_locale
     build_c9_nvm
     build_c9_c9sdk
-    build_c9_cleanup
+    # build_c9_cleanup
 }
