@@ -3,9 +3,9 @@ FROM debian:latest
 LABEL \
     maintainer="Nathan@Genetzky.us"
 
-COPY [ "./build_0.sh", "./init.sh", "/tmp/" ]
+COPY [ "./build_c9.sh", "./init.sh", "/tmp/" ]
 
-RUN /tmp/build_0.sh
+RUN /tmp/build_c9.sh
 
 EXPOSE 3000
 ENTRYPOINT ["bash", "/tmp/init.sh"]
