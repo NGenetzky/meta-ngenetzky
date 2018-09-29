@@ -16,13 +16,13 @@ build_c9_locale(){
         && locale-gen
 }
 build_c9_nvm(){
-    git clone https://github.com/creationix/nvm.git ~/.nvm \
-        && bash -c "source ~/.nvm/nvm.sh && nvm install 0.10;"
+    git clone https://github.com/creationix/nvm.git /opt/nvm \
+        && bash -c "source /opt/nvm/nvm.sh && nvm install 0.10;"
 }
 build_c9_c9sdk(){
-    git clone https://github.com/c9/core.git ~/c9sdk \
-        && rm -rf ~/c9sdk/.git \
-        && cd ~/c9sdk \
+    git clone https://github.com/c9/core.git /opt/c9sdk \
+        && rm -rf /opt/c9sdk/.git \
+        && cd /opt/c9sdk \
         && ./scripts/install-sdk.sh
 }
 build_c9_cleanup(){
