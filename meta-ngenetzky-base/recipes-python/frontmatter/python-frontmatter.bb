@@ -19,7 +19,7 @@ activate(){
     . '${B}/bin/activate'
 }
 
-addtask do_bootstrap after do_setup before do_build
+addtask do_bootstrap after do_unpack before do_build
 do_bootstrap(){
     python3 -m venv "${B}"
     activate
