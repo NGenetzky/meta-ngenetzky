@@ -12,8 +12,8 @@ inherit appimage_package
 SRCFILENAME = "Joplin-${PV}-x86_64.AppImage"
 
 SRC_URI = "https://github.com/laurent22/joplin/releases/download/v${PV}/Joplin-${PV}-x86_64.AppImage;downloadfilename=${SRCFILENAME}"
-SRC_URI[md5sum] = "54d9ab248544ed535c46ee8677235567"
-SRC_URI[sha256sum] = "809f6c24d78ebbbac5edb643deeb01b4dc06a54a712e4ebec381a98ab493ac73"
+SRC_URI[md5sum] = "e0a07d5ceade45eab362fddfffce70c7"
+SRC_URI[sha256sum] = "fe7cdc3a7f86d6e949acb73fdbded59b0c0bbf46f87fd3fce2e6686a9a1e8fcb"
 
 do_install() {
     local dest="${D}/${bindir}"
