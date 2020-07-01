@@ -1,0 +1,12 @@
+header:
+  version: 8
+
+target: world
+
+env:
+  SHELL: bash
+
+repos:
+  meta-ngenetzky:
+    layers:
+      meta-ngenetzky-base:
