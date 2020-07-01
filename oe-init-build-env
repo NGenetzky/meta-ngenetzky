@@ -1,19 +1,64 @@
-#!/bin/sh
-# WARNING: This script has unhandled use cases, designed for use with 'kas'.
-
-GITROOT="${GITROOT-$(readlink -f ./$(git rev-parse --show-cdup))}"
-BITBAKE_DIR="${GITROOT}/bitbake"
-BUILD_DIR="${GITROOT}/build"
+#!/bin/bash
+# Attempted to be as compatible with the 'oe-init-build-env' as possible.
+# WARNING: Unhandled use cases. poky/oe-init-build-env much more robust.
+#
+# These environment variables are defined "upstream" and can customize the process.
+# - BITBAKEDIR
+# - BUILDDIR
+#
+# Designed for use with 'kas'.
+# - Configuration of 'bblayers' and 'local.conf' is done through kas.
 
 bitbake_set_path(){
-  local p="$(readlink -f ${1?})"
-    [[ -d ${p} ]] || return 1
+    local p
+    p="$(readlink -f "${1?}")"
+    if [ ! -d "${p}/bin/" ]; then
+      return 1
+    fi
+
     export PATH="${p}/bin:$PATH"
     export PYTHONPATH="${p}/lib:$PYTHONPATH"
 }
 
-bitbake_set_path "${BITBAKE_DIR}"
-export BBPATH="${1-BUILD_DIR}"
-cd "${1-BUILD_DIR}"
+oe_init_build_env(){
+    local d_build d_bitbake
 
-unset bitbake_set_path
+    if [ -z "${1-}" ]; then
+        d_build="${BUILDDIR-build}"
+    else
+        d_build="$1"
+    fi
+    d_build="$(readlink -f "${d_build}")"
+
+    if ! command -v bitbake > /dev/null ; then
+        if [ -z "$2" ]; then
+            if [ -z "$BITBAKEDIR" ]; then
+                # WARNING: This is very specific for a specific setup.
+                d_bitbake="$(git rev-parse --show-cdup)bitbake"
+                if [ ! -d "${d_bitbake}/bin/" ]; then
+                    # NOTE: kas does not support git submodules natively.
+                    git submodule update --init "${d_bitbake}"
+                fi
+                if [ ! -d "${d_bitbake}/bin/" ]; then
+                    echo 'ERROR: Unable to locate bitbake'
+                    return 1
+                fi
+            else
+                d_bitbake="${BITBAKEDIR}"
+            fi
+        else
+            d_bitbake="${2?}"
+        fi
+        bitbake_set_path "${d_bitbake}"
+    fi
+
+    mkdir -p "${d_build}"
+    export BBPATH="${d_build}"
+    cd "${d_build}" || return 1
+}
+
+set -x
+oe_init_build_env "$@"
+set +x
+
+unset bitbake_set_path oe_init_build_env
