@@ -35,7 +35,7 @@ python do_build_shell_scripts(){
 
 do_build[dirs] = "${S} ${B}"
 do_build(){
-    KAS_REPO_REF_DIR="${YOCTO_CACHE_DIR}/downloads/"
+    KAS_REPO_REF_DIR="${DL_DIR}"
     export KAS_REPO_REF_DIR
 
     # We must use 'kas' at least once, to ensure it is properly fetched.
