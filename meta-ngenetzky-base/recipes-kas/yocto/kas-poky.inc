@@ -6,15 +6,22 @@ INC_PR = "r0"
 
 B = "${WORKDIR}/build"
 YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
+KAS_FILES = "${WORKDIR}/kas.yml"
 
 inherit bb_fetcher
 addtask do_unpack before do_build
+
+exec_kas(){
+    # WARNING: This assumes you are inside of docker container
+    # TODO: Make it more flexbile
+    python3 -m kas "$@"
+}
 
 console(){
     KAS_REPO_REF_DIR="${YOCTO_CACHE_DIR}/downloads/"
     export KAS_REPO_REF_DIR
 
-    kas shell "${S}/kas.yml"
+    exec_kas shell "${KAS_FILES}"
 }
 
 inherit bb_build_shell
@@ -32,7 +39,7 @@ do_build(){
     export KAS_REPO_REF_DIR
 
     # We must use 'kas' at least once, to ensure it is properly fetched.
-    kas shell "${S}/kas.yml" -c 'bitbake-layers show-recipes > recipes.low'
+    exec_kas shell "${KAS_FILES}" -c 'bitbake-layers show-recipes > recipes.log'
 }
 
 do_export_cache[nostamp] = "1"
