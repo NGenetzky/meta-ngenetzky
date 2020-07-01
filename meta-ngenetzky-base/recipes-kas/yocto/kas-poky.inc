@@ -1,37 +1,20 @@
 # Copyright (C) 2018 Nathan Genetzky <nathan@genetzky.us>
 # Released under the MIT license (see COPYING.MIT for the terms)
 
-SUMMARY = "Build using Poky"
-INC_PR = "r6"
+SUMMARY = "Build using Poky with kas"
+INC_PR = "r0"
 
 B = "${WORKDIR}/build"
 YOCTO_CACHE_DIR = "${TOPDIR}/var/cache/yocto-${PV}"
 
 inherit bb_fetcher
-addtask do_unpack before do_setup_conf
-SRC_URI = "\
-    file://bblayers.conf \
-    file://local.conf \
-    file://site.conf \
-"
-
-inherit bitbake_conf
-addtask do_bitbake_conf_template after do_unpack before do_build
-python do_bitbake_conf_template_append(){
-    with open(os.path.join(templateconf, 'site.conf'), 'r') as conf:
-        site = conf.read()
-
-    for var in [ 'S', 'B', 'YOCTO_CACHE_DIR']:
-        site = site.replace('{{ '+var+' }}', d.getVar(var))
-
-    with open(os.path.join(buildconf, 'site.conf'), 'w') as conf:
-        conf.write(site)
-}
+addtask do_unpack before do_build
 
 console(){
-    . "${S}/poky/oe-init-build-env" \
-        "${B}" \
-        "${S}/poky/bitbake"
+    KAS_REPO_REF_DIR="${YOCTO_CACHE_DIR}/downloads/"
+    export KAS_REPO_REF_DIR
+
+    kas shell "${S}/kas.yml"
 }
 
 inherit bb_build_shell
@@ -43,21 +26,13 @@ python do_build_shell_scripts(){
     export_func_shell('do_export_cache', d, os.path.join(workdir, 'do_export_cache.sh'), workdir)
 }
 
-do_build[depends] = "\
-    meta-openembedded:do_unpack \
-    poky:do_unpack \
-"
 do_build[dirs] = "${S} ${B}"
 do_build(){
-    local poky_pv='${PV}'
-    local metaoe_pv='${PV}'
+    KAS_REPO_REF_DIR="${YOCTO_CACHE_DIR}/downloads/"
+    export KAS_REPO_REF_DIR
 
-    ln -sfT \
-        ${TOPDIR}/tmp/work/poky-${poky_pv}*/git/ \
-        "${S}/poky"
-    ln -sfT \
-        ${TOPDIR}/tmp/work/meta-openembedded-${metaoe_pv}*/git/ \
-        "${S}/meta-openembedded"
+    # We must use 'kas' at least once, to ensure it is properly fetched.
+    kas shell "${S}/kas.yml" -c 'bitbake-layers show-recipes > recipes.low'
 }
 
 do_export_cache[nostamp] = "1"
