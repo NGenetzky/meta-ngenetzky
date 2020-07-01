@@ -18,7 +18,7 @@ exec_kas(){
 }
 
 console(){
-    KAS_REPO_REF_DIR="${YOCTO_CACHE_DIR}/downloads/"
+    KAS_REPO_REF_DIR="${DL_DIR}/git/"
     export KAS_REPO_REF_DIR
 
     exec_kas shell "${KAS_FILES}"
@@ -33,9 +33,9 @@ python do_build_shell_scripts(){
     export_func_shell('do_export_cache', d, os.path.join(workdir, 'do_export_cache.sh'), workdir)
 }
 
-do_build[dirs] = "${S} ${B}"
+do_build[dirs] = "${B} ${WORKDIR}"
 do_build(){
-    KAS_REPO_REF_DIR="${DL_DIR}"
+    KAS_REPO_REF_DIR="${DL_DIR}/git/"
     export KAS_REPO_REF_DIR
 
     # We must use 'kas' at least once, to ensure it is properly fetched.
